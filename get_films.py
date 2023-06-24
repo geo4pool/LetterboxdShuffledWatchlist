@@ -6,13 +6,13 @@ score_translations = {"": None, "½": 0.5, "★": 1.0, "★½": 1.5, "★★": 2
                       "★★★": 3.0, "★★★½": 3.5, "★★★★": 4.0, "★★★★½": 4.5, "★★★★★": 5.0}
 
 
-def get_data(url):
+def get_data(url):  # basic function to get beautiful soup object when web scraping
     res = requests.get(url)
     res = bs(res.text, "lxml")
     return res
 
 
-def get_basic_stats(username, type):
+def get_basic_stats(username, type):  # allows you to know how many films (of a certain type) there are, so you known how many pages there are to scrape later
     if type == "watchlist":  # watchlist has to be done differently
         url = f"https://letterboxd.com/{username}/watchlist"
         res = get_data(url)
@@ -32,7 +32,7 @@ def get_basic_stats(username, type):
             return int(type_stats.find("span").text.replace(",", ""))  # gets rid of commas
 
 
-def get_user_films_to_df(username):
+def get_user_films_to_df(username):  # creates df of username, film-id, score (rating) and film-name
     film_data = []
     number_films = get_basic_stats(username, "films")
     page_number = 1
@@ -49,14 +49,14 @@ def get_user_films_to_df(username):
     return user_films_df
 
 
-def get_film_page_data(path, number):  # changed the size of the data
+def get_film_page_data(path, number):  # small function to get posters from a page
     url = f"https://letterboxd.com/{path}/page/{number}"
     res = get_data(url)
     all_posters = res.find_all("li", {"class": "poster-container"})
     return all_posters
 
 
-def poster_to_film(poster, score=True):  # default value for watchlist boolean is false
+def poster_to_film(poster, score=True):  # gets film information from posters
     film = poster.find("div", {"class": "film-poster"})
     attrs = film.attrs
     film_name = film.contents[1].attrs['alt']
@@ -69,7 +69,7 @@ def poster_to_film(poster, score=True):  # default value for watchlist boolean i
         return film_id, film_name
 
 
-def get_entire_watchlist(username):
+def get_entire_watchlist(username):  # gets all films in watchlist
     number_watchlist = get_basic_stats(username, "watchlist")
     page_number = 1
     watchlist = []
@@ -85,7 +85,7 @@ def get_entire_watchlist(username):
     return watchlist
 
 
-def get_a_shuffled_watchlist(username):
+def get_a_shuffled_watchlist(username):  # gets a shuffled subset of watchlist
     url = f"https://letterboxd.com/{username}/watchlist/by/shuffle/"
     res = get_data(url)
     watchlist_posters = res.find_all("li", {"class": "poster-container"})
@@ -96,7 +96,7 @@ def get_a_shuffled_watchlist(username):
     return watchlist
 
 
-def get_friend_usernames(username):  # not done!!!!
+def get_friend_usernames(username):  # gets all usernames for friends, useful when finding lots of film rating data and need to check other users
     # find number of following
     number_following = get_basic_stats(username, "following")
 
@@ -115,7 +115,7 @@ def get_friend_usernames(username):  # not done!!!!
     return usernames
 
 
-def get_favourites(username):
+def get_favourites(username):  # not used yet, finds the 0-4 "favourites" on the user profile
     res = get_data(f"https://letterboxd.com/{username}")
     favourites_section = res.find("section", {"id": "favourites"})
     posters = favourites_section.find_all("li", {"class": "poster-container"})
