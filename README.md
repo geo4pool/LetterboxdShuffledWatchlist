@@ -6,4 +6,4 @@ Most of my time has been spent collecting data so far, because Letterboxd does n
 
 The data has already been colected and has been stored in a CSV file. To run, just run main.py and you can insert different usernames to get different recommendations.
 
-I think I will also do the similarity based on the user's favourite films or 5/5 rated films instead of based on the watchlist, as a user wanting to watch film X does not necessarily mean they would want to watch all 10 films most similar to film X, but if a user loves film Y, then they will probably want to watch all the films similar to film Y. However, I did it the way I did to keep the analogous nature to the Spotify smart shuffle.
+I think I'll also do the similarity based on the user's favourite films or 5/5 rated films instead of based on the watchlist, as a user wanting to watch film X does not necessarily mean they would want to watch all 10 films most similar to film X, but if a user loves film Y, then they will probably want to watch all the films similar to film Y. However, I did it the way I did to keep the analogous nature to the Spotify smart shuffle.
